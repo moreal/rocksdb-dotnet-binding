@@ -125,7 +125,7 @@ else
         LIBEXT=.dylib
         RUNTIME=osx-x64
         
-        CFLAGS="-Wno-defaulted-function-deleted -Wno-shadow -std=c++17 -Wmissing-exception-spec "
+        CFLAGS="-Wno-defaulted-function-deleted -Wno-shadow -std=c++17 -Wmissing-exception-spec -I/opt/homebrew/include "
         
         echo "${CMAKE_INSTALL_LIBDIR}"
         echo "${CMAKE_INSTALL_INCLUDEDIR}"
@@ -137,18 +137,20 @@ else
         brew install zlib
         # brew install bzip2
         # brew install gflags
-        
-        export ZLIB_INCLUDE="${HOMEBREW_CELLAR}/zlib/1.2.11/include"
-        export ZLIB_LIB_RELEASE="${HOMEBREW_CELLAR}/zlib/1.2.11/lib/libz.a"
-        
-        export LZ4_INCLUDE="${HOMEBREW_CELLAR}/lz4/1.9.3/include"
-        export LZ4_LIB_RELEASE="${HOMEBREW_CELLAR}/lz4/1.9.3/lib/liblz4.a"
 
-        export SNAPPY_INCLUDE="${HOMEBREW_CELLAR}/snappy/1.1.9/include"
-        export SNAPPY_LIB_RELEASE="${HOMEBREW_CELLAR}/snappy/1.1.9/lib/libsnappy.a"
+        ls /opt/homebrew/include
+        
+        export ZLIB_INCLUDE="${HOMEBREW_CELLAR}/zlib/1.3.1/include"
+        export ZLIB_LIB_RELEASE="${HOMEBREW_CELLAR}/zlib/1.3.1/lib/libz.a"
+        
+        export LZ4_INCLUDE="${HOMEBREW_CELLAR}/lz4/1.10.0/include"
+        export LZ4_LIB_RELEASE="${HOMEBREW_CELLAR}/lz4/1.10.0/lib/liblz4.a"
 
-        export ZSTD_INCLUDE="${HOMEBREW_CELLAR}/zstd/1.5.0/include"
-        export ZSTD_LIB_RELEASE="${HOMEBREW_CELLAR}/zstd/1.5.0/lib/libzstd.a"
+        export SNAPPY_INCLUDE="${HOMEBREW_CELLAR}/snappy/1.2.1/include"
+        export SNAPPY_LIB_RELEASE="${HOMEBREW_CELLAR}/snappy/1.2.1/lib/libsnappy.a"
+
+        export ZSTD_INCLUDE="${HOMEBREW_CELLAR}/zstd/1.5.6/include"
+        export ZSTD_LIB_RELEASE="${HOMEBREW_CELLAR}/zstd/1.5.6/lib/libzstd.a"
         export WITH_BZ2=0
         export ROCKSDB_DISABLE_JEMALLOC=1       
     else
@@ -164,7 +166,7 @@ else
         export JEMALLOC_LIB="/usr/lib/x86_64-linux-gnu/libjemalloc_pic.a"
 
         # Linux Dependencies    
-        # sudo apt-get install libsnappy-dev libbz2-dev libz-dev liblz4-dev libzstd-dev
+        sudo apt-get install -y libsnappy-dev libbz2-dev libz-dev liblz4-dev libzstd-dev libjemalloc-dev
         # Linux dependencies must be now installed in the docker image located here: 
         # https://github.com/theolivenbaum/rocksdb-docker-linux/blob/main/Dockerfile
 
@@ -174,9 +176,6 @@ else
     (cd rocksdb && {
         checkout "rocksdb" "$ROCKSDBREMOTE" "$ROCKSDBVERSION" "$ROCKSDBVERSION"
 
-
-        #fix min macos version on build file
-        sed -i '' 's/-mmacosx-version-min=10\.12/-mmacosx-version-min=10\.13/g' build_tools/build_detect_platform
         echo build_tools/build_detect_platform
         
         export CFLAGS
