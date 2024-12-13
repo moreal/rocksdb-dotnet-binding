@@ -43,7 +43,7 @@ jobs:
     - name: Build RocksDB
       shell: cmd
       run: |
-        call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\vsdevcmd" -arch=x64 && bash build-rocksdb.sh
+        call "C:\Program Files\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\vsdevcmd" -arch=x64 && bash build-rocksdb.sh
       working-directory: ${{ github.workspace }}/build-native/
 
     - name: Upload Windows Artifacts
